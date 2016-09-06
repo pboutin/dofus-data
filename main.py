@@ -6,6 +6,7 @@ import requests
 import os.path
 import timeit
 import datetime
+import urllib
 from pyquery import PyQuery as pq
 
 errors = []
@@ -54,8 +55,7 @@ def main():
         printInfo('Writing the new "dofus-data.json"')
         json.dump({
             'metadata': {
-                'baseUrl': baseUrl,
-                'imageBaseUrl': imageBaseUrl
+                'baseUrl': baseUrl
             },
             'data': newData
         }, output)
@@ -154,8 +154,11 @@ def process(itemEndpoint, attempt=0):
 
     rawName = itemPage('div.ak-title-container h1').text()
     rawLevel = itemPage('div.ak-encyclo-detail-level').text()
-    rawImage = itemPage('div.ak-encyclo-detail-illu img').attr('src')
     rawType = itemPage('div.ak-encyclo-detail-type span').text()
+
+    rawImage = itemPage('div.ak-encyclo-detail-illu img').attr('src')
+    imageFullUrl = imageBaseUrl + extractInfo('image', rawImage, itemEndpoint)
+    urllib.urlretrieve(imageFullUrl, 'images/' + itemId + '.png')
 
     if not (isString(rawName) and isString(rawLevel) and isString(rawImage) and isString(rawType)):
         return process(itemEndpoint, attempt + 1)
@@ -163,7 +166,6 @@ def process(itemEndpoint, attempt=0):
     result[itemId] = {
         'name': extractInfo('name', rawName, itemEndpoint),
         'level': extractInfo('level', rawLevel, itemEndpoint),
-        'image': extractInfo('image', rawImage, itemEndpoint),
         'type': extractInfo('type', rawType, itemEndpoint),
         'link': itemEndpoint,
         'recipe': recipe
