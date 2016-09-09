@@ -62,7 +62,7 @@ def main():
 
     with open('errors.log', 'a') as errorOutput:
         printInfo('Writing errors log')
-        errorOutput.write('LOGS FOR ' + str(datetime.datetime.now()))
+        errorOutput.write("\nLOGS FOR %s\n" % str(datetime.datetime.now()))
         for error in errors:
             errorOutput.write("%s\n" % error)
             printError(error)
@@ -120,7 +120,7 @@ def process(itemEndpoint, attempt=0):
     if attempt == 0:
         printInfo(itemEndpoint)
     elif attempt == 5:
-        printError('failed to parse - ' + itemEndpoint)
+        printError('Failed to process - ' + itemEndpoint)
     else:
         printWarning('Processing attempt - ' + str(attempt) + ' - ' + itemEndpoint)
 
@@ -155,12 +155,17 @@ def process(itemEndpoint, attempt=0):
     rawName = itemPage('div.ak-title-container h1').text()
     rawLevel = itemPage('div.ak-encyclo-detail-level').text()
     rawType = itemPage('div.ak-encyclo-detail-type span').text()
-
     rawImage = itemPage('div.ak-encyclo-detail-illu img').attr('src')
-    imageFullUrl = imageBaseUrl + extractInfo('image', rawImage, itemEndpoint)
-    urllib.urlretrieve(imageFullUrl, 'images/' + itemId + '.png')
 
     if not (isString(rawName) and isString(rawLevel) and isString(rawImage) and isString(rawType)):
+        return process(itemEndpoint, attempt + 1)
+
+    imageFullUrl = imageBaseUrl + extractInfo('image', rawImage, itemEndpoint)
+
+    try:
+        urllib.urlretrieve(imageFullUrl, 'images/' + itemId + '.png')
+    except:
+        printWarning('Failed to download image')
         return process(itemEndpoint, attempt + 1)
 
     result[itemId] = {
