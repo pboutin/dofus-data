@@ -69,7 +69,7 @@ class DofusData(WebScraper):
             'name': self.extractFrom(itemPage('div.ak-title-container h1').text()),
             'level': self.extractFrom(itemPage('div.ak-encyclo-detail-level').text(), u'\d+'),
             'type': self.extractFrom(itemPage('div.ak-encyclo-detail-type span').text()),
-            'link': itemUrl.replace(self.baseUrl, ''),
+            'link': itemUrl,
             'recipe': recipe
         }
 
