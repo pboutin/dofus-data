@@ -6,6 +6,7 @@ import os.path
 import timeit
 import datetime
 import urllib
+import sys
 from pyquery import PyQuery as pq
 
 class WebScraper:
@@ -28,14 +29,21 @@ class WebScraper:
             self.printSuccess('Processing from scratch')
             processedData = {}
 
-        if os.path.isfile(errorFilePath):
-            self.printSuccess('Recovering from pending errors')
-            with open(errorFilePath) as errorFile:
-                pastErrors = json.load(errorFile)
-                urls = [pastError['url'] for pastError in pastErrors]
-        else:
-            self.printSuccess('Loading URLs...')
-            urls = self.getItemUrls()
+        urls = []
+
+        for arg in sys.argv:
+            if not re.match(r'.+\.py', arg):
+                urls.append(arg)
+
+        if not len(urls):
+            if os.path.isfile(errorFilePath):
+                self.printSuccess('Recovering from pending errors')
+                with open(errorFilePath) as errorFile:
+                    pastErrors = json.load(errorFile)
+                    urls = [pastError['url'] for pastError in pastErrors]
+            else:
+                self.printSuccess('Loading URLs...')
+                urls = self.getItemUrls()
 
         self.printSuccess('Initialization : done')
 
