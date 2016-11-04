@@ -41,9 +41,13 @@ class AlmanaxData(WebScraper):
         rawQuest = itemPage('div.dofus div.more p.fleft').text()
         rawQuest = self.extractFrom(rawQuest, r'\d.+')
 
+        rawItemId = itemPage('div.dofus div.more img').attr('src')
+        rawItemId = self.extractFrom(rawItemId, r'\d+\..+\.png')
+
         item = {
             'bonus': self.extractFrom(rawBonus, r'.+\.'),
-            'quest': re.sub(r' et rapporter.*', '', rawQuest)
+            'quest': re.sub(r' et rapporter.*', '', rawQuest),
+            'id': self.extractFrom(rawItemId, r'^\d+')
         }
 
         return (itemId, item)
