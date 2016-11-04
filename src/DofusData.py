@@ -60,7 +60,8 @@ class DofusData(WebScraper):
         imageUrl = self.imageBaseUrl + self.extractFrom(rawImageSrc, u'\/\d+.png$')
 
         try:
-            urllib.urlretrieve(imageUrl, '../images/' + itemId + '.png')
+            itemIdDigits = self.extractFrom(itemId, r'^\d+')
+            urllib.urlretrieve(imageUrl, '../images/' + itemIdDigits + '.png')
         except:
             self.isFailing = True
             self.printWarning("Failed to download image : %s" % imageUrl)
