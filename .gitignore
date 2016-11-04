@@ -1,2 +1,3 @@
 *.errors.json
 *.pyc
+.directory
