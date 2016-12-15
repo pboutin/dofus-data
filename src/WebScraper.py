@@ -10,6 +10,7 @@ import sys
 from pyquery import PyQuery as pq
 
 class WebScraper:
+    debug = False
     errors = []
     baseUrl = ''
     outputFile = 'default'
@@ -18,8 +19,8 @@ class WebScraper:
 
     def __init__(self):
         startTime = timeit.default_timer()
-        errorFilePath = "../%s.errors.json" % self.outputFile
-        outputFilePath = "../%s.json" % self.outputFile
+        errorFilePath = "../%s.errors%s" % (self.outputFile, '.debug.json' if self.debug else '.json')
+        outputFilePath = "../%s%s" % (self.outputFile, '.debug.json' if self.debug else '.json')
 
         if os.path.isfile(outputFilePath):
             with open(outputFilePath) as dataFile:
