@@ -3,14 +3,6 @@
 from WebScraper import WebScraper
 
 import re
-import json
-import requests
-import os
-import os.path
-import timeit
-import datetime
-import urllib
-from pyquery import PyQuery as pq
 
 class AlmanaxData(WebScraper):
     outputFile = 'almanax-data'
