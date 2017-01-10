@@ -62,7 +62,7 @@ class WebScraper:
         self.printSuccess('Keys: %s' % str(len(processedData.keys())))
 
         with open(outputFilePath, 'w') as dataOutput:
-            json.dump(processedData, dataOutput)
+            json.dump(processedData, dataOutput, encoding="utf-8", sort_keys=False)
             self.printSuccess('Data writing : done')
 
         errorCount = len(self.errors)
