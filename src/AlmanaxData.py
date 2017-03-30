@@ -3,6 +3,7 @@
 from WebScraper import WebScraper
 
 import re
+from datetime import datetime
 
 class AlmanaxData(WebScraper):
     outputFile = 'almanax-data'
@@ -10,23 +11,26 @@ class AlmanaxData(WebScraper):
 
 
     def getItemUrls(self):
-        year = '2016' # leap year
+        years = ['2016', '2017', '2018', '2019', '2020', '2021']
         months = [31,29,31,30,31,30,31,31,30,31,30,31]
 
         urls = []
-        currentMonth = 1
-        for daysCount in months:
-            month = self.padTwoDigit(str(currentMonth))
-            for day in range(daysCount):
-                day = self.padTwoDigit(str(day + 1))
-                urls.append("%s/%s-%s-%s" % (self.baseUrl, year, month, day))
-            currentMonth = currentMonth + 1
+        year = datetime.now().year
+        for yearOffset in range(2):
+            currentMonth = 1
+            for daysCount in months:
+                month = self.padTwoDigit(str(currentMonth))
+                for day in range(daysCount):
+                    day = self.padTwoDigit(str(day + 1))
+                    urls.append("%s/%s-%s-%s" % (self.baseUrl, year, month, day))
+                currentMonth = currentMonth + 1
+            year = year + 1
 
         return urls
 
 
     def parsePage(self, itemPage, itemUrl):
-        itemId = self.extractFrom(itemUrl, u'\d{2}-\d{2}$')
+        itemId = self.extractFrom(itemUrl, u'\d{4}-\d{2}-\d{2}$')
 
         rawBonus = itemPage('div.dofus div.more').text()
 
