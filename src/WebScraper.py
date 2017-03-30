@@ -20,10 +20,11 @@ class WebScraper:
     def __init__(self):
         startTime = timeit.default_timer()
         errorFilePath = "../%s.errors%s" % (self.outputFile, '.debug.json' if self.debug else '.json')
-        outputFilePath = "../%s%s" % (self.outputFile, '.debug.json' if self.debug else '.json')
+        outputJsonPath = "../%s%s" % (self.outputFile, '.debug.json' if self.debug else '.json')
+        outputJsPath = "../%s%s" % (self.outputFile, '.debug.js' if self.debug else '.js')
 
-        if os.path.isfile(outputFilePath):
-            with open(outputFilePath) as dataFile:
+        if os.path.isfile(outputJsonPath):
+            with open(outputJsonPath) as dataFile:
                 self.printSuccess("Updating the current '%s.json'" % self.outputFile)
                 processedData = json.load(dataFile)
         else:
@@ -61,9 +62,14 @@ class WebScraper:
         self.printSuccess('Urls: %s' % str(len(urls)))
         self.printSuccess('Keys: %s' % str(len(processedData.keys())))
 
-        with open(outputFilePath, 'w') as dataOutput:
-            json.dump(processedData, dataOutput, encoding="utf-8", sort_keys=False)
-            self.printSuccess('Data writing : done')
+        processedDataJson = json.dumps(processedData, encoding="utf-8", sort_keys=True)
+        with open(outputJsonPath, 'w') as jsonOutput:
+            jsonOutput.write(processedDataJson)
+            self.printSuccess('Data writing (.json) : done')
+
+        with open(outputJsPath, 'w') as jsOutput:
+            jsOutput.write("export default %s;" % processedDataJson)
+            self.printSuccess('Data writing (.js) : done')
 
         errorCount = len(self.errors)
         if errorCount:
