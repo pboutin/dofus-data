@@ -11,7 +11,6 @@ class AlmanaxData(AbstractWebScraper):
 
 
     def getItemUrls(self):
-        years = ['2016', '2017', '2018', '2019', '2020', '2021']
         months = [31,29,31,30,31,30,31,31,30,31,30,31]
 
         urls = []
@@ -41,7 +40,7 @@ class AlmanaxData(AbstractWebScraper):
         rawItemId = self.extractFrom(rawItemId, r'\d+\..+\.png')
 
         item = {
-            'bonus': self.extractFrom(rawBonus, r'.+\.'),
+            'bonus': self.extractFrom(rawBonus, r'.+?\.'),
             'quest': re.sub(r' et rapporter.*', '', rawQuest),
             'id': self.extractFrom(rawItemId, r'^\d+')
         }
