@@ -1,12 +1,12 @@
 # coding=utf-8
 
-from WebScraper import WebScraper
+from AbstractWebScraper import AbstractWebScraper
 
 import re
 import urllib
 from pyquery import PyQuery as pq
 
-class DofusData(WebScraper):
+class DofusData(AbstractWebScraper):
     outputFile = 'dofus-data'
     baseUrl = 'http://www.dofus.com'
     imageBaseUrl = 'http://staticns.ankama.com/dofus/www/game/items/200'
@@ -87,29 +87,57 @@ class DofusData(WebScraper):
     def _parseEffects(self, effectElements):
         def _getEffectFor(effectLine):
             matcher = {
-                'fo': u'\d Force',                              'ine': u'\d Intelligence',
-                'agi': u'\d Agilité',                           'cha': u'\d Chance',
-                'sa': u'\d Sagesse',                            'vi': u'\d Vitalité',
-                'ini': u'\d Initiative',                        'pod': u'\d Pods',
-                'pi_per': u'\d Puissance \(pièges\)',           'prospe': u'\d Prospection',
-                'pui': u'\d Puissance',                         're_cri': u'\d Résistance Critiques',
-                're_eau': u'\d Résistance Eau',                 're_feu': u'\d Résistance Feu',
-                're_neutre': u'\d Résistance Neutre',           're_air': u'\d Résistance Air',
-                're_terre': u'\d Résistance Terre',             're_pou': u'\d Résistance Poussée',
-                'do_air': u'\d Dommages Air',                   'do_cri': u'\d Dommages Critiques',
-                'do_eau': u'\d Dommages Eau',                   'do_feu': u'\d Dommages Feu',
-                'do_terre': u'\d Dommages Terre',               'do_neutre': u'\d Dommages Neutre',
-                'pi': u'\d Dommages Pièges',                    'do_pou': u'\d Dommages Poussée',
-                'do_ren': u'Renvoie \d+ dommages',              'do': u'\d Dommages$',
-                'fui': u'\d Fuite',                             'tac': u'\d Tacle',
-                'ret_pa': u'\d Retrait PA',                     'ret_pme': u'\d Retrait PM',
-                're_pa': u'\d Esquive PA',                      're_pme': u'\d Esquive PM',
-                're_per_air': u'\d\% Résistance Air',           're_per_eau': u'\d\% Résistance Eau',
-                're_per_feu': u'\d\% Résistance Feu',           're_per_neutre': u'\d\% Résistance Neutre',
-                're_per_terre': u'\d\% Résistance Terre',       'cri': u'\d\% Critique',
-                'so': u'\d Soins',                              'invo': u'\d Invocations',
-                'po': u'\d Portée',                             'ga_pa': u'\d PA',
-                'ga_pme': u'\d PM'
+                'fo': u'\d Force',
+                'ine': u'\d Intelligence',
+                'agi': u'\d Agilité',
+                'cha': u'\d Chance',
+                'sa': u'\d Sagesse',
+                'vi': u'\d Vitalité',
+                'ini': u'\d Initiative',
+                'pod': u'\d Pods',
+                'pi_per': u'\d Puissance \(pièges\)',
+                'prospe': u'\d Prospection',
+                'pui': u'\d Puissance$',
+                're_cri': u'\d Résistance Critiques',
+                're_eau': u'\d Résistance Eau',
+                're_feu': u'\d Résistance Feu',
+                're_neutre': u'\d Résistance Neutre',
+                're_air': u'\d Résistance Air',
+                're_terre': u'\d Résistance Terre',
+                're_pou': u'\d Résistance Poussée',
+                'do_air': u'\d Dommages Air',
+                'do_cri': u'\d Dommages Critiques',
+                'do_eau': u'\d Dommages Eau',
+                'do_feu': u'\d Dommages Feu',
+                'do_terre': u'\d Dommages Terre',
+                'do_neutre': u'\d Dommages Neutre',
+                'pi': u'\d Dommages Pièges',
+                'do_pou': u'\d Dommages Poussée',
+                'do_ren': u'Renvoie (\d+ . |)\d+ dommages',
+                'do': u'\d Dommages$',
+                'fui': u'\d Fuite',
+                'tac': u'\d Tacle',
+                'ret_pa': u'\d Retrait PA',
+                'ret_pme': u'\d Retrait PM',
+                're_pa': u'\d Esquive PA',
+                're_pme': u'\d Esquive PM',
+                're_per_air': u'\d\% Résistance Air',
+                're_per_eau': u'\d\% Résistance Eau',
+                're_per_feu': u'\d\% Résistance Feu',
+                're_per_neutre': u'\d\% Résistance Neutre',
+                're_per_terre': u'\d\% Résistance Terre',
+                'cri': u'\d\% Critique$',
+                'so': u'\d Soins',
+                'invo': u'\d Invocations',
+                'po': u'\d Portée',
+                'ga_pa': u'\d PA',
+                'ga_pme': u'\d PM',
+                'do_per_di': u'\d+\% Dommages distance',
+                'do_per_ar': u'\d+\% Dommages d\'armes',
+                'do_per_so': u'\d+\% Dommages aux sorts',
+                'de_per_me': u'\d+\% Dommages mêlée',
+                're_per_me': u'\d+\% Résistance mêlée',
+                're_per_di': u'\d+\% Résistance distance'
             }
             for effect in matcher:
                 if re.findall(matcher[effect], effectLine):

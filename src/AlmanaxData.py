@@ -1,11 +1,11 @@
 # coding=utf-8
 
-from WebScraper import WebScraper
+from AbstractWebScraper import AbstractWebScraper
 
 import re
 from datetime import datetime
 
-class AlmanaxData(WebScraper):
+class AlmanaxData(AbstractWebScraper):
     outputFile = 'almanax-data'
     baseUrl = 'http://www.krosmoz.com/fr/almanax'
 

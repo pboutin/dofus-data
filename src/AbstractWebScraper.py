@@ -9,7 +9,7 @@ import urllib
 import sys
 from pyquery import PyQuery as pq
 
-class WebScraper:
+class AbstractWebScraper:
     debug = False
     errors = []
     baseUrl = ''
