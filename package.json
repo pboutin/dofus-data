@@ -1,0 +1,14 @@
+{
+  "name": "dofus-data",
+  "version": "2.1.1",
+  "description": "JSON and JS scrape of Dofus/Almanax encyclopedia.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pboutin/dofus-data.git"
+  },
+  "author": "Pascal Boutin <contact@pboutin.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pboutin/dofus-data/issues"
+  }
+}

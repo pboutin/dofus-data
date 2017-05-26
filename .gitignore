@@ -3,3 +3,4 @@
 .directory
 *.debug.json
 *.debug.js
+npm-debug.log
