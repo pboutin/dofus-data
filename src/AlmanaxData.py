@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 # coding=utf-8
 
 from AbstractWebScraper import AbstractWebScraper
@@ -5,10 +6,20 @@ from AbstractWebScraper import AbstractWebScraper
 import re
 from datetime import datetime
 
-class AlmanaxData(AbstractWebScraper):
-    outputFile = 'almanax-data'
-    baseUrl = 'http://www.krosmoz.com/fr/almanax'
+LANGS = {'en', 'fr'}
+ET_RAPPORTER = {
+    'fr': r' et rapporter l\'offrande.*',
+    'en': r' and take the offering.*',
+}
 
+class AlmanaxData(AbstractWebScraper):
+    def __init__(self, lang):
+        if lang not in LANGS:
+            raise KeyError('invalid language: ' + lang)
+        self.outputFile = 'almanax-data-%s' % (lang,)
+        self.baseUrl = 'http://www.krosmoz.com/%s/almanax' % (lang,)
+        self.lang = lang
+        super(AlmanaxData, self).__init__()
 
     def getItemUrls(self):
         months = [31,29,31,30,31,30,31,31,30,31,30,31]
@@ -41,7 +52,7 @@ class AlmanaxData(AbstractWebScraper):
 
         item = {
             'bonus': self.extractFrom(rawBonus, r'.+?\.'),
-            'quest': re.sub(r' et rapporter.*', '', rawQuest),
+            'quest': re.sub(ET_RAPPORTER[self.lang], '', rawQuest),
             'id': self.extractFrom(rawItemId, r'^\d+')
         }
 
@@ -52,4 +63,5 @@ class AlmanaxData(AbstractWebScraper):
         return input if len(input) is 2 else '0' + input
 
 
-AlmanaxData()
+for lang in LANGS:
+    AlmanaxData(lang)
