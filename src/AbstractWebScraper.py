@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 import re
 import json
 import requests
@@ -9,7 +10,7 @@ import urllib
 import sys
 from pyquery import PyQuery as pq
 
-class AbstractWebScraper:
+class AbstractWebScraper(object):
     debug = False
     errors = []
     baseUrl = ''
