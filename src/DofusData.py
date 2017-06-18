@@ -57,9 +57,9 @@ class DofusData(AbstractWebScraper):
         try:
             itemIdDigits = self.extractFrom(itemId, u'^\d+')
             urllib.urlretrieve(imageUrl, '../images/' + itemIdDigits + '.png')
-        except:
+        except Exception as err:
             self.isFailing = True
-            self.printWarning("Failed to download image : %s" % imageUrl)
+            self.printWarning("Failed to download image : %s (%s)" % (imageUrl, err))
 
         item = {
             'name': self.extractFrom(itemPage('div.ak-title-container h1').text()),
