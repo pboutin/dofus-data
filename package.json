@@ -1,6 +1,6 @@
 {
   "name": "dofus-data",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "JSON and JS scrape of Dofus/Almanax encyclopedia.",
   "repository": {
     "type": "git",
